@@ -5,11 +5,22 @@ class Calculator extends Component {
   state = {
     previousValue: 0,
     value: 0,
-    operation: 'sum'
+    operation: null,
+    allowDot: true
+  }
+
+  resetState = () => {
+    this.setState({
+      previousValue: 0,
+      value: 0,
+      operation: null,
+      allowDot: true
+    })
   }
 
   valueHandler = (n) => {
     const oldValue = this.state.value;
+    if (n === '.'){this.setState({allowDot: !this.state.allowDot})}
     if (oldValue !== 0){
       const updatedValue = oldValue + String(n);
       this.setState({
@@ -75,7 +86,7 @@ class Calculator extends Component {
         <br/>
         <button onClick={() => this.valueHandler(4)}>4</button>
         <button onClick={() => this.valueHandler(5)}>5</button>
-        <button onClick={() => this.valueHandler(6)}>6</button>
+        <button onClick={this.valueHandler.bind(this, 6)}>6</button>
         <button onClick={() => this.operationHandler('sub')}>-</button>
         <br/>
         <button onClick={() => this.valueHandler(1)}>1</button>
@@ -85,8 +96,10 @@ class Calculator extends Component {
         <br/>
         <button onClick={() => this.operationHandler('div')}>/</button>
         <button onClick={() => this.valueHandler(0)}>0</button>
-        <button>.</button>
+        <button onClick={() => this.valueHandler('.')} disabled={!this.state.allowDot}>.</button>
         <button onClick={() => this.executeOperation()}>=</button>
+        <br/>
+        <button onClick={() => this.resetState()}>Reset</button>
       </div>
     )
   }
